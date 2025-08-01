@@ -22,6 +22,7 @@ const resultRoutes = require('./routes/results');
 const votingSettingsRoutes = require('./routes/votingSettings');
 
 const app = express();
+app.set('trust proxy', 1); // Enable trust proxy for Render and similar platforms
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
@@ -106,6 +107,10 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
+app.get('/', (req, res) => {
+  res.json({ message: 'API server running' });
+});
+
 // Socket.io connection handling
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
@@ -150,4 +155,4 @@ server.listen(PORT, () => {
   console.log(`Environment: ${process.env.NODE_ENV}`);
 });
 
-module.exports = { app, io }; 
+module.exports = { app, io };
